@@ -8,6 +8,19 @@ interface IParams {
   conversationId?: string;
 }
 
+interface User {
+  id: string;
+  email: string | null;           // Updated to match Prisma
+  name: string | null;
+  emailVerified: Date | null;
+  image: string | null;
+  hashedPassword: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  conversationIds: string[];
+  seenMessageIds: string[];
+}
+
 export async function DELETE(
   request: Request,
   { params }: { params: IParams }
@@ -42,7 +55,7 @@ export async function DELETE(
       },
     });
 
-    existingConversation.users.forEach((user) => {
+    existingConversation.users.forEach((user:User) => {
       if (user.email) {
         pusherServer.trigger(
           user.email,
